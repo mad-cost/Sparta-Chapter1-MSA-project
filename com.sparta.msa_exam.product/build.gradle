@@ -31,7 +31,8 @@ dependencies {
 	// Spring Data Jpa
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	// HyperSQL Database
-	runtimeOnly 'org.hsqldb:hsqldb'
+	// runtimeOnly 'org.hsqldb:hsqldb'
+	runtimeOnly 'com.mysql:mysql-connector-j'
 
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'

@@ -1,10 +1,25 @@
 spring:
   application:
     name: order-service
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/msa-order
+    username: root
+    password: seoght3658
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
 server:
   port: 19092
+
 eureka:
   client:
     service-url:
-      # 유레카 서버의 주소 설정
       defaultZone: http://localhost:19090/eureka/
