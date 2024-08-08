@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class OrderRequestDto {
+public class CreateOrderRequestDto {
   private String name;
   private List<Long> productIds = new ArrayList<>();
 }

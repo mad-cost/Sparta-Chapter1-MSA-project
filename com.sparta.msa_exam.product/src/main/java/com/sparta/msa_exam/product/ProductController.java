@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class ProductController {
@@ -34,7 +33,6 @@ public class ProductController {
           @PathVariable("id")
           Long id
   ) {
-    log.info("######## Products 도착: " + id);
     return productService.findById(id);
   }
 

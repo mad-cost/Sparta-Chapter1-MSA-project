@@ -1,7 +1,8 @@
 package com.sparta.msa_exam.order.service;
 
 import com.sparta.msa_exam.order.ProductClient;
-import com.sparta.msa_exam.order.dto.OrderRequestDto;
+import com.sparta.msa_exam.order.dto.CreateOrderRequestDto;
+import com.sparta.msa_exam.order.dto.PutOrderRequestDto;
 import com.sparta.msa_exam.order.entity.Order;
 import com.sparta.msa_exam.order.entity.OrderProduct;
 import com.sparta.msa_exam.order.repository.OrderProductRepository;
@@ -11,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -29,7 +29,7 @@ public class OrderService {
   }
 
   @Transactional
-  public void createOrder(OrderRequestDto requestDto) {
+  public void createOrder(CreateOrderRequestDto requestDto) {
     List<Long> productIds = requestDto.getProductIds();
 
     Order order = new Order();
@@ -43,5 +43,17 @@ public class OrderService {
       orderProductRepository.save(orderProduct);
     }
 
+  }
+
+  public void putOrder(Long orderId, PutOrderRequestDto requestDto) {
+    Order order = orderRepository.findById(orderId).orElseThrow(()->
+            new IllegalArgumentException("orderId가 존재하지 않습니다"));
+
+    Long product = requestDto.getProductId();
+    // requestDto로 받은 제품의 id가 존재하는지 검증
+    Long checkedId = getProductInfo(product);
+
+    OrderProduct orderProduct = new OrderProduct(order, checkedId);
+    orderProductRepository.save(orderProduct);
   }
 }
