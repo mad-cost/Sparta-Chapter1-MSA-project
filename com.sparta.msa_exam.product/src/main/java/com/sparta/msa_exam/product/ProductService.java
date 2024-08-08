@@ -25,9 +25,13 @@ public class ProductService {
   }
 
   public Long findById(Long productId) {
-    Product product = productRepository.findById(productId).orElseThrow(()->
-            new IllegalStateException("ProductService 입력하신 제품을 찾을 수 없습니다."));
-    return product.getProduct_id();
+    Product product = productRepository.findById(productId).orElse(null);
+    if (product != null) {
+      return product.getProduct_id();
+    } else {
+      return null;
+    }
   }
+
 
 }

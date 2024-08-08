@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-@Slf4j
+@Slf4j(topic = "OrderService")
 @Service
 @RequiredArgsConstructor
 public class OrderService {
@@ -38,11 +38,16 @@ public class OrderService {
     order.setName(requestDto.getName());
     orderRepository.save(order);
 
-    // requestDto로 받은 제품의 id가 존재하는지 검증하고, 데이터 넣어주기
+    // 상품이 전부 존재할 경우 주문에 상품을 추가하고, 존재하지 않는다면 주문에 저장하지 않고 에러 발생.
     for (Long productId : productIds) {
       Long checkedId = getProductInfo(productId);
-      OrderProduct orderProduct = new OrderProduct(order, checkedId);
-      orderProductRepository.save(orderProduct);
+      if (checkedId != null){
+        OrderProduct orderProduct = new OrderProduct(order, checkedId);
+        orderProductRepository.save(orderProduct);
+      }else {
+        throw new IllegalArgumentException("OrderService 존재하지 않는 상품 번호 : " + productId);
+      }
+
     }
 
   }
@@ -52,16 +57,21 @@ public class OrderService {
             new IllegalArgumentException("OrderService orderId가 존재하지 않습니다"));
 
     Long product = requestDto.getProductId();
-    // requestDto로 받은 제품의 id가 존재하는지 검증
     Long checkedId = getProductInfo(product);
 
-    OrderProduct orderProduct = new OrderProduct(order, checkedId);
-    orderProductRepository.save(orderProduct);
+    // 존재할 경우 주문에 상품을 추가하고, 존재하지 않는다면 주문에 저장하지 않음.
+    if (checkedId != null){
+      OrderProduct orderProduct = new OrderProduct(order, checkedId);
+      orderProductRepository.save(orderProduct);
+    }else {
+      // 존재 하지 않을경우 로그로 알려주기
+      log.info("주문에 추가하고싶은 상품이 존재하지 않습니다.");
+    }
   }
 
   public OrderResponseDto getOrder(Long orderId) {
     Order order = orderRepository.findById(orderId).orElseThrow(()->
-            new IllegalArgumentException("OrderService orderId가 존재하지 않습니다"));
+            new IllegalArgumentException("OrderService 조회하는 orderId가 존재하지 않습니다"));
 
     List<OrderProduct> orderProducts = orderProductRepository.findByOrder(order);
 
