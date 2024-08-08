@@ -2,6 +2,7 @@ package com.sparta.msa_exam.order.service;
 
 import com.sparta.msa_exam.order.ProductClient;
 import com.sparta.msa_exam.order.dto.CreateOrderRequestDto;
+import com.sparta.msa_exam.order.dto.OrderResponseDto;
 import com.sparta.msa_exam.order.dto.PutOrderRequestDto;
 import com.sparta.msa_exam.order.entity.Order;
 import com.sparta.msa_exam.order.entity.OrderProduct;
@@ -12,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -47,7 +49,7 @@ public class OrderService {
 
   public void putOrder(Long orderId, PutOrderRequestDto requestDto) {
     Order order = orderRepository.findById(orderId).orElseThrow(()->
-            new IllegalArgumentException("orderId가 존재하지 않습니다"));
+            new IllegalArgumentException("OrderService orderId가 존재하지 않습니다"));
 
     Long product = requestDto.getProductId();
     // requestDto로 받은 제품의 id가 존재하는지 검증
@@ -56,4 +58,25 @@ public class OrderService {
     OrderProduct orderProduct = new OrderProduct(order, checkedId);
     orderProductRepository.save(orderProduct);
   }
+
+  public OrderResponseDto getOrder(Long orderId) {
+    Order order = orderRepository.findById(orderId).orElseThrow(()->
+            new IllegalArgumentException("OrderService orderId가 존재하지 않습니다"));
+
+    List<OrderProduct> orderProducts = orderProductRepository.findByOrder(order);
+
+    // 제품 아이디 int로 바꿔주기
+    List<Integer> productIds = new ArrayList<>();
+    for (OrderProduct orderProduct : orderProducts){
+      productIds.add(orderProduct.getProductId().intValue());
+    }
+
+    // 반환 값 저장
+    OrderResponseDto responseDto = new OrderResponseDto();
+    responseDto.setOrderId(orderId);
+    responseDto.setProductIds(productIds);
+
+    return  responseDto;
+  }
+
 }

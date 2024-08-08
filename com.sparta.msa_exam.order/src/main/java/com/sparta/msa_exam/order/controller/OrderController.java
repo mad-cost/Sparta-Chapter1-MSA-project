@@ -1,6 +1,7 @@
 package com.sparta.msa_exam.order.controller;
 
 import com.sparta.msa_exam.order.dto.CreateOrderRequestDto;
+import com.sparta.msa_exam.order.dto.OrderResponseDto;
 import com.sparta.msa_exam.order.dto.PutOrderRequestDto;
 import com.sparta.msa_exam.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,15 @@ public class OrderController {
           PutOrderRequestDto requestDto
   ){
     orderService.putOrder(orderId, requestDto);
+  }
+
+  @GetMapping("/order/{orderId}")
+  public OrderResponseDto getOrder(
+          @PathVariable("orderId")
+          Long orderId
+  ){
+    OrderResponseDto responseDto = orderService.getOrder(orderId);
+    return responseDto;
   }
 
 }
