@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j(topic = "ProductController")
 @RestController
 @RequiredArgsConstructor
 public class ProductController {
@@ -27,6 +28,8 @@ public class ProductController {
   @GetMapping("/products")
   private List<ProductResponseDto> findAllProducts(){
       List<ProductResponseDto> responseDto = productService.findAll();
+      // 라운드로빈 형식으로 로드밸런싱 구현
+      log.info("상품 목록을 조회시 포트 번호 : " + serverPort);
       return  responseDto;
   }
 
