@@ -2,6 +2,14 @@ spring:
   application:
     name: order-service
 
+  # Redis
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      username: default
+      password: systempass
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/msa-order
@@ -32,3 +40,4 @@ management:
   tracing:
     sampling:
       probability: 1.0
+

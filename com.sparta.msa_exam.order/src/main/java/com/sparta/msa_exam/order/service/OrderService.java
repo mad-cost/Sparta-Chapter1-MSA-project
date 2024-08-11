@@ -10,6 +10,7 @@ import com.sparta.msa_exam.order.repository.OrderProductRepository;
 import com.sparta.msa_exam.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,6 +70,7 @@ public class OrderService {
     }
   }
 
+  @Cacheable(cacheNames = "itemCache", key = "args[0]") // Duration.ofSeconds(30)
   public OrderResponseDto getOrder(Long orderId) {
     Order order = orderRepository.findById(orderId).orElseThrow(()->
             new IllegalArgumentException("OrderService 조회하는 orderId가 존재하지 않습니다"));
@@ -85,6 +87,9 @@ public class OrderService {
     OrderResponseDto responseDto = new OrderResponseDto();
     responseDto.setOrderId(orderId);
     responseDto.setProductIds(productIds);
+
+    // 캐시에서 조회되지 않고 메서드가 실행될 때 로그를 남긴다 / 30초 동안은 호출시 로그가 나오지 않아야 성공
+    log.info("앞으로 30초 동안 캐시에서 해당 데이터를 가져옵니다.");
 
     return  responseDto;
   }
