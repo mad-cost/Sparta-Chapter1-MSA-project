@@ -2,6 +2,14 @@ spring:
   application:
     name: product-service
 
+  # Redis
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      username: default
+      password: systempass
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/msa_exam
@@ -15,6 +23,7 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true # 주문 조회 API를 호출 했을때 SQL Query(select)가 안나왔던 이유 (일단은 log를 사용하여 확인했었다)
 
 server:
   port: 19093
