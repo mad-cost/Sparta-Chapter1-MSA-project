@@ -1,5 +1,6 @@
-package com.sparta.msa_exam.product;
+package com.sparta.msa_exam.product.application.dtos;
 
+import com.sparta.msa_exam.product.domain.Product;
 import lombok.Getter;
 import lombok.Setter;
 

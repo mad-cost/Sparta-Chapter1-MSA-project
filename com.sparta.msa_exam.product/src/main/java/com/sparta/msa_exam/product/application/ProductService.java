@@ -1,7 +1,10 @@
-package com.sparta.msa_exam.product;
+package com.sparta.msa_exam.product.application;
 
+import com.sparta.msa_exam.product.application.dtos.ProductRequestDto;
+import com.sparta.msa_exam.product.application.dtos.ProductResponseDto;
+import com.sparta.msa_exam.product.domain.Product;
+import com.sparta.msa_exam.product.domain.ProductRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -19,7 +22,12 @@ public class ProductService {
    */
   @CacheEvict(cacheNames = "productList_cache", allEntries = true)
   public void createProducts(ProductRequestDto requestDto) {
-    productRepository.save(new Product(requestDto));
+    // Layered Architecture Pattern 적용 Setter 접근
+    Product product = new Product();
+    product.setName(requestDto.getName());
+    product.setSupply_price(requestDto.getSupply_price());
+    productRepository.save(product);
+
   }
 
   @Cacheable(cacheNames = "productList_cache") // Cache-Aside로 캐시에 등록

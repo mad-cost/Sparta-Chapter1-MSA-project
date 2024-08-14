@@ -1,4 +1,4 @@
-package com.sparta.msa_exam.product;
+package com.sparta.msa_exam.product.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +10,7 @@ import lombok.Setter;
 
 @Getter
 @Entity
+@Setter
 @NoArgsConstructor
 public class Product {
   @Id
@@ -19,8 +20,4 @@ public class Product {
   private String name;
   private Integer supply_price;
 
-  public Product(ProductRequestDto requestDto) {
-    this.name = requestDto.getName();
-    this.supply_price = requestDto.getSupply_price();
-  }
 }
