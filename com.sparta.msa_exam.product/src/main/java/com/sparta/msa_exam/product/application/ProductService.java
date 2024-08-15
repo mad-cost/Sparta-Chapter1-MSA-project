@@ -22,12 +22,7 @@ public class ProductService {
    */
   @CacheEvict(cacheNames = "productList_cache", allEntries = true)
   public void createProducts(ProductRequestDto requestDto) {
-    // Layered Architecture Pattern 적용 Setter 접근
-    Product product = new Product();
-    product.setName(requestDto.getName());
-    product.setSupply_price(requestDto.getSupply_price());
-    productRepository.save(product);
-
+    productRepository.save(Product.create(requestDto.getName(), requestDto.getSupply_price()));
   }
 
   @Cacheable(cacheNames = "productList_cache") // Cache-Aside로 캐시에 등록
